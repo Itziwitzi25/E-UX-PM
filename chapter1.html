@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1 Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .answers label {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #e8f5e9;
+      border: 1px solid #66bb6a;
+      border-radius: 8px;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chapter 1 Quiz</h1>
+  <form id="quizForm">
+    <!-- Questions will be added here dynamically -->
+  </form>
+  <div class="result" id="result" style="display: none;"></div>
+
+  <script>
+    const questions = [
+      {
+        q: "Which of the following describes the nature of the workplace in the digital world?",
+        options: [
+          "It is primarily a single-functional environment.",
+          "It is a highly cross-functional workplace.",
+          "It always follows a strict hierarchical structure.",
+          "It avoids the use of diverse skillsets."
+        ],
+        correct: "B"
+      },
+      {
+        q: "When forming a team in digital product development, what is a crucial consideration, given that there is no set rule for team composition?",
+        options: [
+          "To ensure all team members have the same technical background.",
+          "To assess whom do we need to get the job done, which roles are important, and which skillset helps to succeed with our project or product.",
+          "To exclusively hire external partners for all roles.",
+          "To rely solely on automated processes without human involvement."
+        ],
+        correct: "B"
+      },
+      {
+        q: "What is a primary benefit of using a Skill Matrix in a company or team?",
+        options: [
+          "To determine the financial compensation for each employee.",
+          "To manage customer relationships and feedback.",
+          "To have a quick overview of your teams' ability to solve related tasks and to do an assessment for hiring new people with the right skills.",
+          "To assign specific office spaces to team members."
+        ],
+        correct: "C"
+      },
+      {
+        q: "In the context of the RACI Matrix, who is defined as the person who \"checks that the work is done, is a success, and all this while following the agreed timeline,\" stepping in to find solutions in case of delays?",
+        options: ["Responsible.", "Accountable.", "Consulted.", "Informed."],
+        correct: "B"
+      },
+      {
+        q: "When is the RACI Matrix particularly useful, according to the sources?",
+        options: [
+          "Only during the final review phase of a project.",
+          "When you have clashing opinions in a meeting, or a decision is unclear and you don't know how to move forward.",
+          "Primarily for documenting individual performance reviews.",
+          "As a tool for automated task assignment."
+        ],
+        correct: "B"
+      },
+      {
+        q: "What is Delegation Poker described as, and what is its main purpose?",
+        options: [
+          "A competitive game played by team leaders to win projects.",
+          "A method to strictly enforce top-down decision-making.",
+          "A method that allows teams to clarify roles in a self-organized manner.",
+          "A system for tracking employee attendance."
+        ],
+        correct: "C"
+      },
+      {
+        q: "How do frameworks like Agile, Waterfall, and Hybrid approaches assist interdisciplinary teams?",
+        options: [
+          "By dictating rigid communication protocols.",
+          "By eliminating the need for any team discussions.",
+          "By giving us a mutual understanding of our process and providing standards of how and when work gets done.",
+          "By automating all project tasks, reducing human error."
+        ],
+        correct: "C"
+      },
+      {
+        q: "Which of the following is a core characteristic of the Waterfall method?",
+        options: [
+          "It is highly flexible and open to continuous change.",
+          "It involves sequential phases that are dependent on each other, are carried out one after the other, and progress falls in one direction.",
+          "It emphasizes collaborative, incremental value delivery.",
+          "It prioritizes individuals and interactions over processes and tools."
+        ],
+        correct: "B"
+      },
+      {
+        q: "According to the Agile Manifesto, which aspect is valued *more* than comprehensive documentation?",
+        options: [
+          "Processes and tools.",
+          "Contract negotiation.",
+          "Working software.",
+          "Following a plan."
+        ],
+        correct: "C"
+      },
+      {
+        q: "What is explicitly stated as one of the benefits that Project Management offers?",
+        options: [
+          "It guarantees immediate financial returns for all endeavors.",
+          "It eliminates the need for any form of human collaboration.",
+          "It guides us to document our way of working, making decisions, and to measure our outcomes.",
+          "It restricts creativity and innovation in product development."
+        ],
+        correct: "C"
+      }
+    ];
+
+    const form = document.getElementById('quizForm');
+
+    questions.forEach((q, i) => {
+      const container = document.createElement('div');
+      container.className = 'question';
+      container.dataset.correct = q.correct;
+
+      const title = document.createElement('h3');
+      title.textContent = `${i + 1}. ${q.q}`;
+      container.appendChild(title);
+
+      const answersDiv = document.createElement('div');
+      answersDiv.className = 'answers';
+
+      ['A', 'B', 'C', 'D'].forEach((letter, j) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="q${i + 1}" value="${letter}"> ${letter}. ${q.options[j]}`;
+        answersDiv.appendChild(label);
+      });
+
+      container.appendChild(answersDiv);
+      form.appendChild(container);
+    });
+
+    form.innerHTML += '<button type="submit">Submit</button>';
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const resultBox = document.getElementById('result');
+      const questionsEls = document.querySelectorAll('.question');
+      let score = 0;
+      let output = '<h2>Your Results</h2>';
+
+      questionsEls.forEach((q, index) => {
+        const correct = q.dataset.correct;
+        const selected = q.querySelector('input:checked');
+        const value = selected ? selected.value : 'None';
+        const isCorrect = value === correct;
+
+        if (isCorrect) score++;
+
+        output += `<p><strong>Question ${index + 1}:</strong> ` +
+          (isCorrect ? '✅ Correct' : `❌ Incorrect. Correct answer: ${correct}`) + '</p>';
+      });
+
+      output += `<p><strong>Total Score: ${score} / ${questions.length}</strong></p>`;
+      resultBox.innerHTML = output;
+      resultBox.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
